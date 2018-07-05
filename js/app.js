@@ -1,8 +1,8 @@
-
 /* ======= Model ======= */
 
 var model = {
     currentCat: null,
+    adminView: false,
     cats: [
         {
             clickCount : 0,
@@ -68,6 +68,20 @@ var octopus = {
     incrementCounter: function() {
         model.currentCat.clickCount++;
         catView.render();
+    },
+
+    toggleAdminView: function(adminView) {
+      model.adminView = !adminView;
+    },
+
+    closeAdminView: function(adminView) {
+      model.adminView = false;
+    },
+
+    saveChanges: function() {
+      model.currentCat = adminView.adminForm
+      //how do I tie the admin-form element data to the document.cats model.
+      //i have a feeling this is solved with a closure in a loop.
     }
 };
 
@@ -83,10 +97,12 @@ var catView = {
         this.catImageElem = document.getElementById('cat-img');
         this.countElem = document.getElementById('cat-count');
 
+
         // on click, increment the current cat's counter
         this.catImageElem.addEventListener('click', function(){
             octopus.incrementCounter();
         });
+
 
         // render this view (update the DOM elements with the right values)
         this.render();
@@ -142,6 +158,49 @@ var catListView = {
             this.catListElem.appendChild(elem);
         }
     }
+};
+
+var adminView = {
+  init: function() {
+    //store pointers to our admin DOM elements for access later.
+    this.adminBtn = document.getElementById('admin-btn');
+    this.adminForm = document.getElementById('admin-form');
+    this.nameForm = document.getElementById('name-form');
+    this.imageForm = document.getElementById('image-url');
+    this.countForm = document.getElementById('count-form');
+    this.cancelBtn = document.getElementById('cancel-btn');
+    this.saveBtn = document.getElementById('save-btn');
+
+    this.catImageElem.addEventListener('click', function(){
+        octopus.incrementCounter();
+    });
+
+
+    this.cancelBtn.addEventListener('click', function(){
+        octopus.closeAdminView();
+    });
+
+    //toggles the admin view
+    this.adminBtn.addEventListener('click', function(){
+        octopus.toggleAdminView();
+        console.log('click');
+        /*if (adminView = false) {
+          model.adminView = true
+        }
+        else {
+          model.adminView = false;
+        }*/
+    });
+
+    //render because this seems to be the thing to do here.
+    adminBtn.render();
+    this.render();
+
+  },
+
+  render: function() {
+    var editCat = octopus.getCurrentCat;
+  }
 };
 
 // make it go!
