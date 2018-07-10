@@ -2,7 +2,8 @@
 
 var model = {
     currentCat: null,
-    adminView: false,
+    //shows admin display
+    adminOpen: false,
     cats: [
         {
             clickCount : 0,
@@ -84,6 +85,33 @@ var octopus = {
       model.currentCat = adminView.adminForm
       //how do I tie the admin-form element data to the document.cats model.
       //i have a feeling this is solved with a closure in a loop.
+    },
+
+    //function runs when 'Admin' button is clicked.
+    adminDisplay: function(){
+        if (model.adminOpen === false) {
+            model.adminOpen = true;
+            adminView.show(); //displays the admin input boxes and buttons
+        }
+        else if (model.adminView === true) {
+            model.adminView = false;
+            adminView.hide();// hides the admin input boxes and buttons
+        }
+    },
+
+    //hides admin display when cancel button is clicked.
+    adminCancel: function(){
+        adminView.hide();
+    },
+
+    //hides admin display and saves new cat data when save button is clicked.
+    adminSave: function(){
+        model.currentCat.name= adminCatName.value;
+        model.currentCat.imgSrc= adminCatURL.value;
+        model.currentCat.clickCount= adminCatClicks.value;
+        catView.render();
+        catListView.render();
+        adminView.hide();
     }
 };
 
@@ -184,6 +212,7 @@ var adminView = {
     this.cancelBtn = document.getElementById('cancel-btn');
     this.saveBtn = document.getElementById('save-btn');
     this.countElem = document.getElementById('cat-count');
+    var admin = document.getElementById("admin");
 
     this.cancelBtn.addEventListener('click', function(){
         octopus.closeAdminView();
@@ -199,7 +228,15 @@ var adminView = {
   render: function() {
 
     //adminView.render();
-  }
+  },
+
+  show: function(){
+           admin.style.display = 'block'; //shows the admin div on index.html
+       },
+
+   hide: function(){
+       admin.style.display = 'none';
+   }
 };
 
 // make it go!
